@@ -1,0 +1,36 @@
+import mlflow
+
+
+EXPERIMENT_NAME = "mlflow-demo"  #  ❗ make sure this experiment exists
+RUN_NAME = "run-with-metrics"
+
+
+experiment_id = mlflow.get_experiment_by_name(EXPERIMENT_NAME).experiment_id
+
+
+with mlflow.start_run(
+    experiment_id=experiment_id,
+    run_name=RUN_NAME,
+) as run:
+    
+    # set the tags
+    mlflow.set_tags({
+        "model": "linear-regression",
+        "author": "mlops-course",
+    })
+    
+    # Log a parameter (key-value pair)
+    # Log the model parameters
+    mlflow.log_param("random_seed", 42)
+    mlflow.log_param("train_size", 0.7)
+
+    # Model training code here ...
+
+    # Log a metric; metrics can be updated throughout the run
+    mlflow.log_metric("precision", 0.92)
+    mlflow.log_metric("recall", 0.96)
+
+    # Print the run ID
+    print(f"Run ID: {run.info.run_id}")
+
+    
